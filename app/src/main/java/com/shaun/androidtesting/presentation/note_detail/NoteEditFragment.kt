@@ -1,4 +1,4 @@
-package com.shaun.androidtesting.presentation.fragments
+package com.shaun.androidtesting.presentation.note_detail
 
 import android.os.Bundle
 import android.view.View
