@@ -2,22 +2,20 @@ package com.shaun.androidtesting.presentation.note_list
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shaun.androidtesting.R
-import com.shaun.androidtesting.common.Resource
 import com.shaun.androidtesting.common.showToast
+import com.shaun.androidtesting.data.local.dto.toNotes
 import com.shaun.androidtesting.databinding.FragmentNotesListBinding
 import com.shaun.androidtesting.presentation.note_list.adapter.NoteListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class NotesListFragment : Fragment(R.layout.fragment_notes_list) {
+class NotesListFragment : Fragment(R.layout.fragment_notes_list), NoteListAdapter.OnClick {
 
     private var _binding: FragmentNotesListBinding? = null
     private val binding get() = _binding!!
@@ -36,7 +34,8 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list) {
                 noteId
             )
             findNavController().navigate(action)
-
+//
+//            viewModel.addNote("Hello World", "test")
         }
 
 
@@ -45,30 +44,12 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list) {
     }
 
     private fun setObservers() {
-        viewModel.allNotes.observe(viewLifecycleOwner) { notes ->
-            notes?.let {
-                when (it) {
-                    is Resource.Error -> {
-                        showToast(it.message)
-                    }
-                    is Resource.Idle -> Unit
-                    is Resource.Loading -> {
-                        binding.progressBar.isVisible = true
-                    }
-                    is Resource.Success -> {
-                        binding.progressBar.isVisible = false
-
-
-                        notes.data?.let {
-                            val notesAdapter = NoteListAdapter(noteList = notes.data)
-                            binding.recyclerView.adapter = notesAdapter
-                            binding.recyclerView.layoutManager =
-                                LinearLayoutManager(requireContext())
-
-
-                        }
-                    }
-                }
+        viewModel.allNotes?.observe(viewLifecycleOwner) { notes ->
+            notes?.map { it.toNotes() }?.let { notelist ->
+                val notesAdapter = NoteListAdapter(noteList = notelist, this)
+                binding.recyclerView.adapter = notesAdapter
+                binding.recyclerView.layoutManager =
+                    LinearLayoutManager(requireContext())
             }
         }
 
@@ -85,5 +66,9 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDelete(uid: Long) {
+        viewModel.deleteNote(uid)
     }
 }

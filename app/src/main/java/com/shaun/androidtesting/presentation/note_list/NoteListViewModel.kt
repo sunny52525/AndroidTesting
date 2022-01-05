@@ -1,12 +1,12 @@
 package com.shaun.androidtesting.presentation.note_list
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shaun.androidtesting.common.Resource
 import com.shaun.androidtesting.data.local.dto.NoteDto
-import com.shaun.androidtesting.domain.model.NoteItem
-import com.shaun.androidtesting.domain.use_case.get_note.AddNoteUseCase
+import com.shaun.androidtesting.domain.use_case.get_note.DeleteNoteUseCase
 import com.shaun.androidtesting.domain.use_case.get_note.GetNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,17 +16,17 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
     private val getNoteUseCase: GetNoteUseCase,
-    private val addNoteUseCase: AddNoteUseCase
+    private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
 
 
-    private val _allNotes = MutableLiveData<Resource<List<NoteItem>>?>(Resource.Idle())
-    val allNotes = _allNotes
+    private var _allNotes: LiveData<List<NoteDto>>? = null
+    val allNotes get() = _allNotes
 
     private val _showErrorMessage = MutableLiveData<Boolean>(false)
     val showErrorMessage = _showErrorMessage
 
-    private var _errorMessage = ""
+    private var _errorMessage:String? = ""
     val errorMessage get() = _errorMessage
 
 
@@ -34,37 +34,29 @@ class NoteListViewModel @Inject constructor(
         getAllNotes()
     }
     private fun getAllNotes() {
-        _allNotes.value = Resource.Loading()
-        viewModelScope.launch {
-            _allNotes.value = getNoteUseCase()
+        try {
+            _allNotes = getNoteUseCase()
+        } catch (e: Exception) {
+            Log.d(TAG, "getAllNotes: ${e.message}")
+            setErrorState(e.message)
+
         }
     }
 
 
-    fun addNote(title: String, body: String) {
+
+    fun deleteNote(uid: Long) {
         viewModelScope.launch {
-            val note = NoteDto(
-                title = title,
-                body = body,
-            )
-
-            when (val result = addNoteUseCase(notes = note)) {
-                is Resource.Success -> {
-
-                }
-                is Resource.Error -> {
-                    result.message?.let { setErrorState(it) }
-                }
-                else -> {
-
-                }
+            try {
+                deleteNoteUseCase(uid)
+            } catch (e: Exception) {
+                setErrorState(e.message)
             }
 
-
         }
     }
 
-    private fun setErrorState(message: String) {
+    private fun setErrorState(message: String?) {
         _errorMessage = message
         _showErrorMessage.value = true
     }
