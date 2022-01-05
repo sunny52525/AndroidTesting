@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "451740443373",
+    "project_id": "android-testing-d0153",
+    "storage_bucket": "android-testing-d0153.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451740443373:android:d1a91970f26ac21677a2e4",
+        "android_client_info": {
+          "package_name": "com.shaun.androidtesting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451740443373-qr1o26593k80guitn2b12b23dg4dpo00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpEE5Dzp57xFsP6DanSvTh2gPcRo5O25Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "451740443373-qr1o26593k80guitn2b12b23dg4dpo00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
