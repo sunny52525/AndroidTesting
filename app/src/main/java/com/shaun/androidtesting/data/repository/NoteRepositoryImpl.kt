@@ -10,7 +10,9 @@ class NoteRepositoryImpl(
     private val noteDao: NoteDao
 ) : NoteRepository {
     override suspend fun getAllNotes(): List<NoteDto> {
-        TODO("Not yet implemented")
+        return withContext(Dispatchers.IO) {
+            noteDao.getNotes()
+        }
     }
 
     override suspend fun getNote(id: Long): NoteDto {

@@ -5,12 +5,15 @@ import androidx.room.Room
 import com.shaun.androidtesting.data.local.dao.NoteDao
 import com.shaun.androidtesting.data.local.database.NoteDatabase
 import com.shaun.androidtesting.data.repository.NoteRepositoryImpl
+import com.shaun.androidtesting.domain.use_case.get_note.GetNoteUseCase
 import com.shaun.androidtesting.domain.repository.NoteRepository
+import com.shaun.androidtesting.domain.use_case.get_note.AddNoteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
