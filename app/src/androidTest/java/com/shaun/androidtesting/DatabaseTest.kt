@@ -7,6 +7,7 @@ import com.shaun.androidtesting.data.local.database.NoteDatabase
 import com.shaun.androidtesting.data.local.dto.NoteDto
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -50,4 +51,20 @@ class DatabaseTest {
         assert(allNotes.contains(note))
 
      }
+
+    @Test
+    fun deleteNote()= runBlocking {
+        val note = NoteDto(
+            title = "Note#1",
+            body = "Body#2",
+            uid = 3
+        )
+        noteDao.insertNote(note)
+
+        noteDao.deleteNote(3)
+        val allNotes = noteDao.getNotes().getOrAwaitValue()
+
+        assert(allNotes.contains(note).not())
+
+    }
 }
