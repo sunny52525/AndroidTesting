@@ -67,4 +67,23 @@ class DatabaseTest {
         assert(allNotes.contains(note).not())
 
     }
+    @Test
+    fun getAllNotesTest() = runBlockingTest {
+        val notes = (1..5).map {
+            NoteDto(
+                title = "Note#1",
+                body = "Body#2",
+                uid = it.toLong()
+            )
+        }
+        notes.forEach {
+            noteDao.insertNote(it)
+        }
+        val allNotes = noteDao.getNotes().getOrAwaitValue()
+
+        assert(
+            notes.containsAll(allNotes)
+        )
+
+    }
 }
