@@ -10,10 +10,8 @@ class AddNoteUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(notes: NoteDto): Resource<String?> {
-
-        val noteDto = NoteDto(title = notes.title, body = notes.body)
         return try {
-            repository.addNote(noteDto)
+            repository.addNote(notes)
             Resource.Success(null)
         } catch (e: Exception) {
             Resource.Error(e.message.toString())

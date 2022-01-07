@@ -5,4 +5,9 @@ sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Error<T>(message: String, data: T? = null) : Resource<T>(data, message)
     class Loading<T>(data: T? = null) : Resource<T>(data)
     class Idle<T>():Resource<T>()
+
+}
+
+fun<T> Resource<T>.equal(other:Resource<T>):Boolean{
+    return this.data==other.data && this.message==other.message
 }
