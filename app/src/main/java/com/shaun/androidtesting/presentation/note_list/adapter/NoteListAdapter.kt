@@ -12,7 +12,8 @@ class NoteListAdapter(
 ) : RecyclerView.Adapter<NoteListAdapter.NoteItemHolder>() {
 
     interface OnClick{
-        fun onDelete(uid:Long)
+        fun onDelete(uid:Long,position: Int)
+        fun onEdit(uid: Long)
     }
     class NoteItemHolder( val binding: NoteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -35,7 +36,10 @@ class NoteListAdapter(
         val noteItem = noteList[position]
         with(holder){
             binding.delete.setOnClickListener {
-                listener.onDelete(noteItem.id)
+                listener.onDelete(noteItem.id,position)
+            }
+            binding.note.setOnClickListener {
+                listener.onEdit(noteItem.id)
             }
         }
         holder.bind(noteItem)

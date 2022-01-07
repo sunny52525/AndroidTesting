@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shaun.androidtesting.R
 import com.shaun.androidtesting.common.showToast
 import com.shaun.androidtesting.data.local.dto.toNotes
 import com.shaun.androidtesting.databinding.FragmentNotesListBinding
+import com.shaun.androidtesting.presentation.note_detail.NoteEditFragmentArgs
 import com.shaun.androidtesting.presentation.note_list.adapter.NoteListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -20,6 +24,7 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list), NoteListAdapte
     private var _binding: FragmentNotesListBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var  notesAdapter:NoteListAdapter
     private val viewModel by viewModels<NoteListViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,8 +39,6 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list), NoteListAdapte
                 noteId
             )
             findNavController().navigate(action)
-//
-//            viewModel.addNote("Hello World", "test")
         }
 
 
@@ -46,7 +49,7 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list), NoteListAdapte
     private fun setObservers() {
         viewModel.allNotes?.observe(viewLifecycleOwner) { notes ->
             notes?.map { it.toNotes() }?.let { notelist ->
-                val notesAdapter = NoteListAdapter(noteList = notelist, this)
+                notesAdapter = NoteListAdapter(noteList = notelist, this)
                 binding.recyclerView.adapter = notesAdapter
                 binding.recyclerView.layoutManager =
                     LinearLayoutManager(requireContext())
@@ -68,7 +71,18 @@ class NotesListFragment : Fragment(R.layout.fragment_notes_list), NoteListAdapte
         _binding = null
     }
 
-    override fun onDelete(uid: Long) {
-        viewModel.deleteNote(uid)
+    override fun onDelete(uid: Long, position:Int) {
+        notesAdapter.notifyItemRemoved(position)
+
+        lifecycleScope.launch {
+            delay(400)
+            viewModel.deleteNote(uid)
+        }
+    }
+
+    override fun onEdit(uid: Long) {
+
+        val action=NotesListFragmentDirections.actionNotesListFragmentToNoteEditFragment(isEdit = true, noteId = uid)
+        findNavController().navigate(action)
     }
 }

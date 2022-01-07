@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.shaun.androidtesting.R
 import com.shaun.androidtesting.common.Resource
 import com.shaun.androidtesting.common.showToast
@@ -17,9 +18,15 @@ class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
     private var _binding: FragmentNoteEditBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<NoteEditViewModel>()
+    private val args :NoteEditFragmentArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentNoteEditBinding.bind(view)
+
+
+        if (args.isEdit){
+            viewModel.setId(args.noteId)
+        }
 
         setObserver()
 
@@ -39,7 +46,11 @@ class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
                 return@setOnClickListener
             }
 
-            viewModel.addNote(title = title.toString(), body = body.toString())
+            if (args.isEdit){
+                viewModel.editNote(title=title.toString(),body=body.toString(),noteId=args.noteId)
+            }else {
+                viewModel.addNote(title = title.toString(), body = body.toString())
+            }
         }
     }
 
@@ -64,6 +75,18 @@ class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
                 }
                 is Resource.Success -> {
                     findNavController().popBackStack()
+                }
+            }
+        }
+
+        viewModel.note.observe(viewLifecycleOwner){
+            when(it){
+                is Resource.Error -> showToast(it.message)
+                is Resource.Idle -> Unit
+                is Resource.Loading -> binding.progressBar.isVisible=true
+                is Resource.Success -> {
+                    binding.title.setText(it.data?.title)
+                    binding.body.setText(it.data?.body)
                 }
             }
         }

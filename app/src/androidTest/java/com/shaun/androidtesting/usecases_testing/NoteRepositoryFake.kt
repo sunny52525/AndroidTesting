@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import com.shaun.androidtesting.data.local.dao.NoteDao
 import com.shaun.androidtesting.data.local.dto.NoteDto
 import com.shaun.androidtesting.domain.repository.NoteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class NoteRepositoryFake(
     val dao: NoteDao
@@ -13,14 +15,26 @@ class NoteRepositoryFake(
     }
 
     override suspend fun getNote(id: Long): NoteDto {
-     TODO()
+        return withContext(Dispatchers.Default){
+            dao.getNote(id)
+        }
     }
 
     override suspend fun addNote(noteDto: NoteDto) {
-        dao.insertNote(noteDto)
+       withContext(Dispatchers.Default){
+           dao.insertNote(noteDto)
+       }
     }
 
     override suspend fun deleteNote(uid: Long) {
-         dao.deleteNote(uid)
+        withContext(Dispatchers.Default){
+            dao.deleteNote(uid)
+        }
+    }
+
+    override suspend fun editNote(uid: Long, title: String, body: String) {
+     withContext(Dispatchers.Default){
+         dao.updateNote(uid = uid, title = title, body = body)
+     }
     }
 }

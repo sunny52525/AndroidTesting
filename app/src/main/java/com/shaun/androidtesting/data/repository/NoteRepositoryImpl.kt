@@ -28,8 +28,12 @@ class NoteRepositoryImpl(
         noteDao.deleteNote(uid)
     }
 
+    override suspend fun editNote(uid: Long, title: String, body: String) {
+        noteDao.updateNote(uid = uid, title = title, body = body)
+    }
+
     override suspend fun getNote(id: Long): NoteDto {
-        TODO("Not yet implemented")
+        return noteDao.getNote(id)
     }
 
     override suspend fun addNote(noteDto: NoteDto) {
