@@ -9,9 +9,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shaun.androidtesting.R
 import com.shaun.androidtesting.common.Resource
+import com.shaun.androidtesting.common.hideKeyboard
 import com.shaun.androidtesting.common.showToast
 import com.shaun.androidtesting.databinding.FragmentNoteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
@@ -46,9 +48,15 @@ class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
                 return@setOnClickListener
             }
 
-            if (args.isEdit){
-                viewModel.editNote(title=title.toString(),body=body.toString(),noteId=args.noteId)
-            }else {
+            hideKeyboard()
+
+            if (args.isEdit) {
+                viewModel.editNote(
+                    title = title.toString(),
+                    body = body.toString(),
+                    noteId = args.noteId
+                )
+            } else {
                 viewModel.addNote(title = title.toString(), body = body.toString())
             }
         }

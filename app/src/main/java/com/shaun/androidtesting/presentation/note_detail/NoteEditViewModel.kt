@@ -24,15 +24,19 @@ class NoteEditViewModel @Inject constructor(
     val showErrorMessage = _showErrorMessage
 
 
-    val id = MutableLiveData(0L)
+    val id: MutableLiveData<Long?> = MutableLiveData(null)
 
     val note = Transformations.switchMap(id) {
-        liveData<Resource<NoteItem>> {
-            val result = getSingleNoteUseCase(it)
-            withContext(Dispatchers.Main) {
-                emit(result)
-            }
-        }.distinctUntilChanged()
+        it?.let {
+            liveData<Resource<NoteItem>> {
+
+                val result = getSingleNoteUseCase(it)
+                withContext(Dispatchers.Main) {
+                    emit(result)
+                }
+            }.distinctUntilChanged()
+        }
+
     }
 
 
