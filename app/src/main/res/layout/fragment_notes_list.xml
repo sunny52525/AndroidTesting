@@ -55,6 +55,7 @@
         android:id="@+id/addNoteButton"
         android:backgroundTint="@color/teal_700"
         android:src="@drawable/ic__add"
+        android:contentDescription="Add New Note Button"
         android:text="@string/new_note"
         android:textColor="@color/white"
         android:textStyle="bold"

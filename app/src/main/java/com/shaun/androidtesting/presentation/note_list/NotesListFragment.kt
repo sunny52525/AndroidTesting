@@ -11,7 +11,6 @@ import com.shaun.androidtesting.R
 import com.shaun.androidtesting.common.showToast
 import com.shaun.androidtesting.data.local.dto.toNotes
 import com.shaun.androidtesting.databinding.FragmentNotesListBinding
-import com.shaun.androidtesting.presentation.note_detail.NoteEditFragmentArgs
 import com.shaun.androidtesting.presentation.note_list.adapter.NoteListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
