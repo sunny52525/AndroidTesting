@@ -8,7 +8,7 @@ import com.shaun.androidtesting.domain.model.NoteItem
 
 class NoteListAdapter(
     private val noteList: List<NoteItem>,
-    val listener:OnClick
+    private val listener:OnClick
 ) : RecyclerView.Adapter<NoteListAdapter.NoteItemHolder>() {
 
     interface OnClick{
@@ -21,7 +21,7 @@ class NoteListAdapter(
 
             binding.title.text = noteItem.title
             binding.shortNote.text = noteItem.body
-            binding.date.text = "12/22/11"
+            binding.date.text = noteItem.lastUpdated
 
         }
     }

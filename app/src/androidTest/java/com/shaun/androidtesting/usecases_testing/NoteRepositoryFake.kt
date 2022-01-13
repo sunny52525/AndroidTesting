@@ -1,6 +1,7 @@
 package com.shaun.androidtesting.usecases_testing
 
 import androidx.lifecycle.LiveData
+import com.shaun.androidtesting.common.getDate
 import com.shaun.androidtesting.data.local.dao.NoteDao
 import com.shaun.androidtesting.data.local.dto.NoteDto
 import com.shaun.androidtesting.domain.repository.NoteRepository
@@ -34,7 +35,7 @@ class NoteRepositoryFake(
 
     override suspend fun editNote(uid: Long, title: String, body: String) {
      withContext(Dispatchers.Default){
-         dao.updateNote(uid = uid, title = title, body = body)
+         dao.updateNote(uid = uid, title = title, body = body, lastUpdated = getDate())
      }
     }
 }

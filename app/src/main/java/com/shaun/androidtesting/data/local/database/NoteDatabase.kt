@@ -7,8 +7,11 @@ import com.shaun.androidtesting.data.local.dto.NoteDto
 
 @Database(
     entities = [NoteDto::class],
-    version = 1
+    version = 1,
+
 )
 abstract class NoteDatabase:RoomDatabase(){
     abstract fun getDao():NoteDao
+
+
 }

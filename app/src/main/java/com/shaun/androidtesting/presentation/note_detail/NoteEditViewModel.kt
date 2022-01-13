@@ -28,7 +28,7 @@ class NoteEditViewModel @Inject constructor(
 
     val note = Transformations.switchMap(id) {
         it?.let {
-            liveData<Resource<NoteItem>> {
+            liveData {
 
                 val result = getSingleNoteUseCase(it)
                 withContext(Dispatchers.Main) {

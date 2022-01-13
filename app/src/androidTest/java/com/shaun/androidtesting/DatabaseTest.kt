@@ -1,7 +1,7 @@
 package com.shaun.androidtesting
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.shaun.androidtesting.common.getDate
 import com.shaun.androidtesting.data.local.dao.NoteDao
 import com.shaun.androidtesting.data.local.database.NoteDatabase
 import com.shaun.androidtesting.data.local.dto.NoteDto
@@ -86,4 +86,43 @@ class DatabaseTest {
         )
 
     }
+
+    @Test
+    fun getNote() = runBlocking {
+        val note = NoteDto(
+            title = "Note#1",
+            body = "Body#2",
+            uid = 3
+        )
+        noteDao.insertNote(note)
+
+        val newNote = noteDao.getNote(note.uid)
+
+        assert(note == newNote)
+    }
+
+    @Test
+    fun editNote() = runBlocking {
+        val note = NoteDto(
+            title = "Note#1",
+            body = "Body#2",
+            uid = 3,
+            updatedAt = getDate()
+        )
+        noteDao.insertNote(note)
+
+        val newNote = note.copy(
+            title = "Edited Note",
+            body = "Edited Body",
+
+        )
+
+        noteDao.updateNote(uid = note.uid, title = newNote.title, body = newNote.body, lastUpdated = newNote.updatedAt)
+
+        val newNoteFromDB = noteDao.getNote(uid = note.uid)
+
+        assert(newNoteFromDB == newNote)
+        assert(newNoteFromDB != note)
+    }
+
 }

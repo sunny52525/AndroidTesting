@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.shaun.androidtesting.R
 import com.shaun.androidtesting.common.Resource
 import com.shaun.androidtesting.common.hideKeyboard
+import com.shaun.androidtesting.common.showKeyboard
 import com.shaun.androidtesting.common.showToast
 import com.shaun.androidtesting.databinding.FragmentNoteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +32,7 @@ class NoteEditFragment : Fragment(R.layout.fragment_note_edit) {
         }
 
         setObserver()
-
+        showKeyboard()
         binding.save.setOnClickListener {
 
 

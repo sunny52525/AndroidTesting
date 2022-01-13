@@ -149,6 +149,7 @@ class UseCasesTest {
         assert(newNoteFromDB == newNote)
         assert(newNoteFromDB != noteDto)
 
+
     }
 
     @Test
@@ -158,9 +159,7 @@ class UseCasesTest {
             body = "new body",
             uid = 40
         )
-
         noteDao.insertNote(noteDto)
-
         val noteFromDB = getSingleNoteUseCase(noteDto.uid)
 
         assert(noteFromDB is Resource.Success)

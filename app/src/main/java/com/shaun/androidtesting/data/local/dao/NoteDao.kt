@@ -20,6 +20,6 @@ interface NoteDao {
     @Query("Select * from notes where uid=:uid")
     suspend fun getNote(uid: Long): NoteDto
 
-    @Query("Update notes set title=:title, body=:body where uid=:uid")
-    suspend fun updateNote(uid: Long, title: String, body: String)
+    @Query("Update notes set title=:title, body=:body,updatedAt=:lastUpdated  where uid=:uid")
+    suspend fun updateNote(uid: Long, title: String, body: String,lastUpdated:String)
 }

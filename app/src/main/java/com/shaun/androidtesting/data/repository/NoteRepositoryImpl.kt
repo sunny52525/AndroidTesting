@@ -2,6 +2,7 @@ package com.shaun.androidtesting.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.shaun.androidtesting.common.getDate
 import com.shaun.androidtesting.data.local.dao.NoteDao
 import com.shaun.androidtesting.data.local.dto.NoteDto
 import com.shaun.androidtesting.domain.repository.NoteRepository
@@ -29,7 +30,7 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun editNote(uid: Long, title: String, body: String) {
-        noteDao.updateNote(uid = uid, title = title, body = body)
+        noteDao.updateNote(uid = uid, title = title, body = body, lastUpdated = getDate())
     }
 
     override suspend fun getNote(id: Long): NoteDto {
